@@ -1,0 +1,23 @@
+ <div class="home-page">
+
+  <div class="container page">
+    <div class="row">
+
+
+      <!-- Main view - contains tabs & article list -->
+      <div class="col-md-9">
+        <!-- Tabs for toggling between feed, article lists -->
+
+        <!-- List the current todos -->
+        <form id="todo-form" ng-submit="$ctrl.addTodo()">
+			<input id="new-todo" placeholder="Enter Todo" ng-model="$ctrl.newTodo" ng-disabled="saving" autofocus>
+		</form>
+        
+        <todo-list limit="10" list-config="$ctrl.listConfig"></todo-list>
+
+      </div>
+      
+    </div>
+  </div>
+
+</div>
