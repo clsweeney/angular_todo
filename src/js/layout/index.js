@@ -1,10 +1,10 @@
 import angular from 'angular';
 
-// Create the module where our functionality can attach to
+//Create the module where our functionality can attach to
 let layoutModule = angular.module('app.layout', []);
 
 
-// Components
+//Components
 import AppHeader from './header.component';
 layoutModule.component('appHeader', AppHeader);
 
