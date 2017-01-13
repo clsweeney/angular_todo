@@ -1,25 +1,38 @@
 class TodoListCtrl {
-  constructor($scope) {
+  constructor(User, $scope, $state, $window) {
   'ngInject';
-
-  this.setListTo(this.listConfig);
-
-
-  $scope.$on('setListTo', (ev, newList) => {
-    this.setListTo(newList);
-  });
   
-  $scope.$on('addTodo', (ev, todoValue) => {
-	    this.addTodo(todoValue);
+  this._$state = $state;
+  this._$window = $window;
+  this._allTodos = [];
+  
+  if (!User.current) {
+	  this._$state.go('app.login');
+  }
+  else {
+	  this._User = User;
+	  if (!this.list) {
+		  this.setListTo(this.listConfig);
+	  }
+
+
+
+	  $scope.$on('setListTo', (ev, newList) => {
+		  this.setListTo(newList);
 	  });
 
-  $scope.$on('deleteTodo', (ev, todo) => {
-	    this.deleteTodo(todo);
+	  $scope.$on('addTodo', (ev, todoValue) => {
+		  this.addTodo(todoValue);
 	  });
-  
-  $scope.$on('setPageTo', (ev, pageNumber) => {
-    this.setPageTo(pageNumber);
-  });
+
+	  $scope.$on('deleteTodo', (ev, todo) => {
+		  this.deleteTodo(todo);
+	  });
+
+	  $scope.$on('setPageTo', (ev, pageNumber) => {
+		  this.setPageTo(pageNumber);
+	  });
+  }
 
 }
 	
@@ -58,7 +71,11 @@ class TodoListCtrl {
   }
   
   addTodo(todoValue) {
-	  this.list.push({ id:0, value: todoValue});
+	  this._allTodos.push({ id:0, value: todoValue, createdBy: this._User.current.username });
+	  this._$window.sessionStorage.setItem('todos', JSON.stringify(this._allTodos));
+	  this.list = this._allTodos.filter((elem) => { 
+  	 	return elem.createdBy == this._User.current.username; 
+  	 });
   }
   
   deleteTodo(todo) {
@@ -103,11 +120,26 @@ class TodoListCtrl {
 //      );
 //  }
 	 
-	 this.list = [ 
-	               {id:1, value:'do this'},
-	               {id:2, value:'then this'} 
-	             ];
+	 if (typeof(Storage) !== "undefined") {
+		 let storedTodos = this._$window.sessionStorage.getItem('todos');
+		 if (storedTodos) {
+			 this._allTodos = JSON.parse(storedTodos);
+		 }
+		 else {
+			 this._allTodos = [ 
+				               {id:1, value:'do this', createdBy: 'chris'},
+				               {id:2, value:'then this', createdBy: 'bob'} 
+				             ];
+			 this._$window.sessionStorage.setItem('todos', JSON.stringify(this._allTodos));
+		 }
+	 }
+	 
+	 this.list = this._allTodos.filter((elem) => { 
+	            	 	return elem.createdBy == this._User.current.username; 
+	            	 });
+	 
  }
+ 	
 
 }
 

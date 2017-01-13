@@ -29,9 +29,13 @@ export default class User {
 //        return res;
 //      }
 //    );
+	  if (credentials.password === 'todos') {
+	    	this.current = {username: credentials.username};
+	  }
 	  return this._$q(function(resolve, reject) {
 		   setTimeout(function() {
 		      if (credentials.password === 'todos') {
+		    	this.current = {username: credentials.username};
 		        resolve(
 		        		'Logged in');
 		      } else {

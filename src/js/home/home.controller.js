@@ -1,7 +1,8 @@
 class HomeCtrl {
   constructor(User, AppConstants, $scope) {
     'ngInject';
-
+    
+    this._User = User;
     this.appName = AppConstants.appName;
     this._$scope = $scope;
     this.newTodo = '';
@@ -9,6 +10,11 @@ class HomeCtrl {
   
   addTodo() {
 	  this.changeList(this.newTodo);
+  }
+  
+  logout() {
+	  console.log("Would logout");
+	  this._User.logout();
   }
 
   changeList(newList) {

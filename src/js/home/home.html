@@ -6,7 +6,10 @@
 
       <!-- Main view - contains tabs & article list -->
       <div class="col-md-9">
-        <!-- Tabs for toggling between feed, article lists -->
+        <button class="btn btn-outline-danger"
+          ng-click="$ctrl.logout()">
+          Click here to logout.
+        </button>
 
         <!-- List the current todos -->
         <form id="todo-form" ng-submit="$ctrl.addTodo()">
