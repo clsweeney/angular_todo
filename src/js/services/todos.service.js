@@ -54,4 +54,14 @@ export default class Todos {
 		this._$window.sessionStorage.setItem('todos', JSON.stringify(this._allTodos));
 		return this.query();
 	}
+	
+	updateTodo(todo) {
+		this._allTodos.some((elem) => { 
+			if (elem.id === todo.id) {
+				elem.value = todo.value;
+				return true;
+			} 
+		});
+		this._$window.sessionStorage.setItem('todos', JSON.stringify(this._allTodos));
+	}
 }

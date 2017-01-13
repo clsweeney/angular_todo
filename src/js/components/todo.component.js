@@ -20,6 +20,7 @@ class TodoCtrl {
 	}
 
 	updateTodo() {
+		this._Todos.updateTodo(this.todo);
 		this.editFlag = false;
 	}
 }
