@@ -3,23 +3,19 @@
 
 	<div class="container page">
 		<div class="row">
-
-
-			<!-- Main view - contains tabs & article list -->
 			<div class="col-md-9">
-				<button class="btn btn-outline-danger" ng-click="$ctrl.logout()">
-					Click here to logout.</button>
+			<span class="label">For:</span> <span class="username" ng-bind="$ctrl.username()"></span>
+				<button class="btn-logout" ng-click="$ctrl.logout()">
+					sign out</button>
 
 				<!-- List the current todos -->
 				<form id="todo-form" ng-submit="$ctrl.addTodo()">
-					<input id="new-todo" placeholder="Enter New Todo"
+					<input id="new-todo" placeholder="Enter New Todo (press return when complete)"
 						ng-model="$ctrl.newTodo" ng-disabled="saving" autofocus>
 				</form>
 
 				<todo-list limit="10" list-config="$ctrl.listConfig"></todo-list>
-
 			</div>
-
 		</div>
 	</div>
 

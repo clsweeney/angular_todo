@@ -1,0 +1,35 @@
+.container.page {
+    margin-top: 0rem;
+}
+
+.label {
+    font-family: "Titillium Web", sans-serif;
+    font-size: 1.1rem;
+    padding-top: 0rem;
+    margin-right: 0.2rem;
+    color: #5CB85C;
+}
+
+.username {
+	font-size: 1.25rem;
+}
+
+.btn-logout {
+	float: right;
+    border-width: 0px;
+    background-color: white;
+}
+
+#new-todo, .todo-edit {
+	width: 80%;
+	margin-left: 2rem;
+	margin-top: 0.2rem;
+    margin-bottom: 0.4rem;
+}
+
+.done-btn {
+	border-width: 0px;
+    background-color: white;
+    margin-left: 2rem;
+    margin-right: 2rem;
+}

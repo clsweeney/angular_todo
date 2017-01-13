@@ -9,17 +9,16 @@ class HomeCtrl {
 	}
 
 	addTodo() {
-		this.changeList(this.newTodo);
+		this._$scope.$broadcast('addTodo', this.newTodo);
+		this.newTodo = '';
 	}
 
 	logout() {
-		console.log("Would logout");
 		this._User.logout();
 	}
-
-	changeList(newList) {
-		this._$scope.$broadcast('addTodo', newList);
-		this.newTodo = '';
+	
+	username() {
+		return this._User.current.username;
 	}
 }
 

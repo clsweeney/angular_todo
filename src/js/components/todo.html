@@ -1,9 +1,9 @@
 <div class="todo">
-	<button ng-if="!$ctrl.editFlag" ng-click='$ctrl.deleteTodo()'>Delete</button>
+	<button class="done-btn" ng-if="!$ctrl.editFlag" ng-click='$ctrl.deleteTodo()'>done</button>
 	<span class='todo-value' ng-if="!$ctrl.editFlag"
 		ng-bind="$ctrl.todo.value" ng-dblclick="$ctrl.editTodo()"></span>
 	<form id="todo-form" ng-submit="$ctrl.updateTodo()"
 		ng-if="$ctrl.editFlag">
-		<input ng-model="$ctrl.todo.value" ng-disabled="saving" autofocus>
+		<input class="todo-edit" ng-model="$ctrl.todo.value" ng-disabled="saving" autofocus>
 	</form>
 </div>
