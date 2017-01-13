@@ -1,83 +1,57 @@
 export default class Todos {
-  constructor(AppConstants, User, $http, $q) {
+  constructor(AppConstants, User, $http, $q, $window) {
     'ngInject';
 
     this._AppConstants = AppConstants;
     this._User = User;
     this._$http = $http;
     this._$q = $q;
-
-
+    this._$window = $window;
+    
+    this._allTodos;
+    
+	 if (typeof(Storage) !== "undefined" && !this._allTodos) {
+		 let storedTodos = this._$window.sessionStorage.getItem('todos');
+		 if (storedTodos) {
+			 this._allTodos = JSON.parse(storedTodos);
+		 }
+		 else {
+			 this._allTodos = [ 
+				               {id:1, value:'do this', createdBy: 'chris'},
+				               {id:2, value:'then this', createdBy: 'bob'} 
+				             ];
+			 this._$window.sessionStorage.setItem('todos', JSON.stringify(this._allTodos));
+		 }
+	 }
   }
-
+  
   query(config) {
-    // Create the $http object for this request
-    let request = {
-      url: this._AppConstants.api + '/articles' + ((config.type === 'feed') ? '/feed' : ''),
-      method: 'GET',
-      params: config.filters ? config.filters : null
-    };
-    return this._$http(request).then((res) => res.data);
+    // normally this is where a request would be created, etc.
+	// However, for this exercise we will use browser sessionStorage.
+	// Simulate $http get with a deferred...
+	let deferred = this._$q.defer();
+	 deferred.resolve(this._allTodos.filter((elem) => { 
+	            	 	return elem.createdBy == this._User.current.username; 
+	            	 }));
+	 
+	 return deferred.promise;
   }
 
-  get(slug) {
-    let deferred = this._$q.defer();
-
-    if (!slug.replace(" ", "")) {
-      deferred.reject("Article slug is empty");
-      return deferred.promise;
-    }
-
-    this._$http({
-      url: this._AppConstants.api + '/articles/' + slug,
-      method: 'GET'
-    }).then(
-      (res) => deferred.resolve(res.data.article),
-      (err) => deferred.reject(err)
-    );
-
-    return deferred.promise;
+  save(todoValue) {
+	  let maxId = -1;
+	  this._allTodos.forEach((elem) => {
+		  maxId = maxId < elem.id ? elem.id : maxId;
+	  });
+	  this._allTodos.push({ id:maxId + 1, value: todoValue, createdBy: this._User.current.username });
+	  this._$window.sessionStorage.setItem('todos', JSON.stringify(this._allTodos));
+	  return this.query();
   }
-
-  destroy(slug) {
-    return this._$http({
-      url: this._AppConstants.api + '/articles/' + slug,
-      method: 'DELETE'
-    })
+  
+  deleteTodo(todo) {
+	  this._allTodos = this._allTodos.filter((elem) => { 
+  	 	return elem.id != todo.id; 
+  	 });
+	  this._$window.sessionStorage.setItem('todos', JSON.stringify(this._allTodos));
+	  return this.query();
   }
-
-  save(article) {
-    let request = {};
-
-    if (article.slug) {
-      request.url = `${this._AppConstants.api}/articles/${article.slug}`;
-      request.method = 'PUT';
-      delete article.slug;
-
-    } else {
-      request.url = `${this._AppConstants.api}/articles`;
-      request.method = 'POST';
-    }
-
-    request.data = { article: article };
-
-    return this._$http(request).then((res) => res.data.article);
-  }
-
-
-  favorite(slug) {
-    return this._$http({
-      url: this._AppConstants.api + '/articles/' + slug + '/favorite',
-      method: 'POST'
-    })
-  }
-
-  unfavorite(slug) {
-    return this._$http({
-      url: this._AppConstants.api + '/articles/' + slug + '/favorite',
-      method: 'DELETE'
-    })
-  }
-
-
 }

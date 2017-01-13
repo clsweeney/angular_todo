@@ -1,12 +1,26 @@
 class TodoCtrl {
-  constructor($scope) {
+  constructor(Todos, $scope, $state) {
 	  'ngInject';
+	  this._Todos = Todos;
 	  this._$scope = $scope;
+	  this._$state = $state;
+	  
+	  this.editFlag = false;
   }
   
   deleteTodo() {
-	  console.log('~~~~~~~ Here');
-	  this._$scope.$broadcast('deleteTodo', this.todo);
+	  this._Todos.deleteTodo(this.todo)
+	  	.then( (result) => {
+	  		this._$scope.$emit('todDeleted');
+	  	});
+  }
+  
+  editTodo() {
+	  this.editFlag = true;
+  }
+  
+  updateTodo() {
+	  this.editFlag = false;
   }
 }
 

@@ -13,7 +13,7 @@
 
         <!-- List the current todos -->
         <form id="todo-form" ng-submit="$ctrl.addTodo()">
-			<input id="new-todo" placeholder="Enter Todo" ng-model="$ctrl.newTodo" ng-disabled="saving" autofocus>
+			<input id="new-todo" placeholder="Enter New Todo" ng-model="$ctrl.newTodo" ng-disabled="saving" autofocus>
 		</form>
         
         <todo-list limit="10" list-config="$ctrl.listConfig"></todo-list>

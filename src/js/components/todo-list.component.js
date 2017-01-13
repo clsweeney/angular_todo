@@ -1,10 +1,9 @@
 class TodoListCtrl {
-  constructor(User, $scope, $state, $window) {
+  constructor(User, Todos, $scope, $state) {
   'ngInject';
   
+  this._Todos = Todos;
   this._$state = $state;
-  this._$window = $window;
-  this._allTodos = [];
   
   if (!User.current) {
 	  this._$state.go('app.login');
@@ -12,132 +11,39 @@ class TodoListCtrl {
   else {
 	  this._User = User;
 	  if (!this.list) {
-		  this.setListTo(this.listConfig);
+		  this.updateTodoList();
 	  }
 
-
-
-	  $scope.$on('setListTo', (ev, newList) => {
-		  this.setListTo(newList);
+	  $scope.$on('updateTodoView', (ev, notUsed) => {
+		  this.updateTodoList();
 	  });
 
 	  $scope.$on('addTodo', (ev, todoValue) => {
 		  this.addTodo(todoValue);
 	  });
-
-	  $scope.$on('deleteTodo', (ev, todo) => {
-		  this.deleteTodo(todo);
-	  });
-
-	  $scope.$on('setPageTo', (ev, pageNumber) => {
-		  this.setPageTo(pageNumber);
+	  
+	  $scope.$on('todDeleted', (ev, todoValue) => {
+		  this.updateTodoList(null);
 	  });
   }
 
 }
-	
-//  constructor(Todos, $scope) {
-//    'ngInject';
-//
-//    this._Todos = Todos;
-//
-//    this.setListTo(this.listConfig);
-//
-//
-//    $scope.$on('setListTo', (ev, newList) => {
-//      this.setListTo(newList);
-//    });
-//
-//    $scope.$on('setPageTo', (ev, pageNumber) => {
-//      this.setPageTo(pageNumber);
-//    });
-//
-//  }
-
-  setListTo(newList) {
-    // Set the current list to an empty array
-    this.list = [];
-
-    // Set listConfig to the new list's config
-    this.listConfig = newList;
-
-    this.runQuery();
-  }
-
-  setPageTo(pageNumber) {
-    this.listConfig.currentPage = pageNumber;
-
-    this.runQuery();
-  }
-  
   addTodo(todoValue) {
-	  this._allTodos.push({ id:0, value: todoValue, createdBy: this._User.current.username });
-	  this._$window.sessionStorage.setItem('todos', JSON.stringify(this._allTodos));
-	  this.list = this._allTodos.filter((elem) => { 
-  	 	return elem.createdBy == this._User.current.username; 
-  	 });
-  }
-  
-  deleteTodo(todo) {
-	  console.log("here again...");
+	  this._Todos
+	  	.save(todoValue)
+	  	.then(
+		 	(result) => {
+		 		this.list = result;
+		 	});
   }
 
-
-
- runQuery() {
-//    // Show the loading indicator
-//    this.loading = true;
-//
-//    // Create an object for this query
-//    let queryConfig = {
-//      type: this.listConfig.type,
-//      filters: this.listConfig.filters || {}
-//    };
-//
-//    // Set the limit filter from the component's attribute
-//    queryConfig.filters.limit = this.limit;
-//
-//    // If there is no page set, set page as 1
-//    if (!this.listConfig.currentPage) {
-//      this.listConfig.currentPage = 1;
-//    }
-//
-//    // Add the offset filter
-//    queryConfig.filters.offset = (this.limit * (this.listConfig.currentPage - 1));
-//
-//    // Run the query
-//    this._Articles
-//      .query(queryConfig)
-//      .then(
-//        (res) => {
-//          this.loading = false;
-//
-//          // Update list and total pages
-//          this.list = res.articles;
-//
-//          this.listConfig.totalPages = Math.ceil(res.articlesCount / this.limit);
-//        }
-//      );
-//  }
-	 
-	 if (typeof(Storage) !== "undefined") {
-		 let storedTodos = this._$window.sessionStorage.getItem('todos');
-		 if (storedTodos) {
-			 this._allTodos = JSON.parse(storedTodos);
-		 }
-		 else {
-			 this._allTodos = [ 
-				               {id:1, value:'do this', createdBy: 'chris'},
-				               {id:2, value:'then this', createdBy: 'bob'} 
-				             ];
-			 this._$window.sessionStorage.setItem('todos', JSON.stringify(this._allTodos));
-		 }
-	 }
-	 
-	 this.list = this._allTodos.filter((elem) => { 
-	            	 	return elem.createdBy == this._User.current.username; 
-	            	 });
-	 
+  updateTodoList() {
+	 this._Todos
+	 	.query()
+	 	.then(
+	 		(result) => {
+	 			this.list = result;
+	 		});
  }
  	
 
