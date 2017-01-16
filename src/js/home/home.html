@@ -13,8 +13,9 @@
 					<input id="new-todo" placeholder="Enter New Todo (press return when complete)"
 						ng-model="$ctrl.newTodo" ng-disabled="saving" autofocus>
 				</form>
-
+				<div class="todo-list">
 				<todo-list limit="10" list-config="$ctrl.listConfig"></todo-list>
+				</div>
 			</div>
 		</div>
 	</div>

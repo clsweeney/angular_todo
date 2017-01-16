@@ -6,6 +6,7 @@ class TodoCtrl {
 		this._$state = $state;
 
 		this.editFlag = false;
+		this.notUsed = false;
 	}
 
 	deleteTodo() {
@@ -13,6 +14,7 @@ class TodoCtrl {
 		.then( (result) => {
 			this._$scope.$emit('todDeleted');
 		});
+		this.notUsed = false;
 	}
 
 	editTodo() {

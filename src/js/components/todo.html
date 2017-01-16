@@ -1,5 +1,5 @@
 <div class="todo">
-	<button class="done-btn" ng-if="!$ctrl.editFlag" ng-click='$ctrl.deleteTodo()'>done</button>
+	<input type="checkbox" class="done-btn" ng-if="!$ctrl.editFlag" ng-change='$ctrl.deleteTodo()' ng-model="$ctrl.notUsed"></input>
 	<span class='todo-value' ng-if="!$ctrl.editFlag"
 		ng-bind="$ctrl.todo.value" ng-dblclick="$ctrl.editTodo()"></span>
 	<form id="todo-form" ng-submit="$ctrl.updateTodo()"

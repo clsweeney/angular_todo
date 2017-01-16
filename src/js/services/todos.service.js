@@ -42,7 +42,7 @@ export default class Todos {
 		this._allTodos.forEach((elem) => {
 			maxId = maxId < elem.id ? elem.id : maxId;
 		});
-		this._allTodos.push({ id:maxId + 1, value: todoValue, createdBy: this._User.current.username });
+		this._allTodos.unshift({ id:maxId + 1, value: todoValue, createdBy: this._User.current.username });
 		this._$window.sessionStorage.setItem('todos', JSON.stringify(this._allTodos));
 		return this.query();
 	}

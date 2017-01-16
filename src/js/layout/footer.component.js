@@ -1,7 +1,9 @@
 class AppFooterCtrl {
-	constructor(AppConstants) {
+	constructor(AppConstants, VersionInfo) {
 		'ngInject';
 		this.appName = AppConstants.appName;
+		this.appVersion = VersionInfo.gitHumanizedBranch();
+		this.shortGitHash = VersionInfo.shortGitHash();
 
 		// Get today's date to generate the year
 		this.date = new Date();

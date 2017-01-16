@@ -1,5 +1,6 @@
 var gulp          = require('gulp');
 var notify        = require('gulp-notify');
+var del 		  = require('del');
 var source        = require('vinyl-source-stream');
 var browserify    = require('browserify');
 var babelify      = require('babelify');
@@ -11,6 +12,10 @@ var uglify        = require('gulp-uglify');
 var merge         = require('merge-stream');
 var sourcemaps = require('gulp-sourcemaps');
 var buffer = require('vinyl-buffer');
+var RevAll = require('gulp-rev-all');
+var execSync = require('child_process').execSync;
+var replace = require('gulp-replace');
+var revdel = require('gulp-rev-delete-original');
 
 // Where our files are located
 var jsFiles   = "src/js/**/*.js";
@@ -101,3 +106,28 @@ gulp.task('default', ['html', 'css', 'browserify'], function() {
   gulp.watch(jsFiles, ['browserify']);
   gulp.watch("css/local.css", ['css']);
 });
+
+gulp.task('version-build', ['build'], function() {
+        var revAll = new RevAll({
+            dontRenameFile: [/^\/favicon.ico$/g, /^\/index.html/g, /^\/env-.*js$/g]
+        } );
+        var gitHash = process.env.BUILD_VCS_NUMBER ? process.env.BUILD_VCS_NUMBER : execSync( "git rev-list --max-count=1 HEAD").toString();
+        var gitBranch = execSync( "git rev-parse --abbrev-ref HEAD").toString();
+
+        return gulp.src('dist/**')
+        	.pipe(replace('TODOS:VersionUnknown', gitHash.trim(), { skipBinary: true }))
+            .pipe(replace('TODOS:BranchUnknown', gitBranch.trim(), { skipBinary: true }))
+            .pipe(revAll.revision())
+            .pipe(revdel())
+            .pipe(gulp.dest('dist'))
+});
+
+//clean the dist folder
+gulp.task('clean-dist', function(cb){
+    return del(['dist/**/*']);
+    cb();
+});
+
+gulp.task('dist', ['version-build'], function() {
+	});
+

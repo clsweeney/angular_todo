@@ -12,4 +12,7 @@ servicesModule.service('JWT', JwtService);
 import TodoService from './todos.service';
 servicesModule.service('Todos', TodoService);
 
+import VersionInfoService from './version.info.service';
+servicesModule.service('VersionInfo', VersionInfoService);
+
 export default servicesModule;

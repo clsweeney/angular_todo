@@ -31,5 +31,11 @@
 	border-width: 0px;
     background-color: white;
     margin-left: 2rem;
-    margin-right: 2rem;
+    margin-right: 0.3rem;
+}
+
+.todo-list {
+	height: 13rem;
+	overflow:auto;
+}
 }

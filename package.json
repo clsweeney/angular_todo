@@ -1,9 +1,14 @@
 {
   "name": "conduit-angularjs",
   "version": "1.0.0",
-  "description": "Angular frontend for Conduit",
-  "author": "Thinkster",
-  "license": "MIT",
+  "description": "Angular frontend for Todos",
+  "author": "Chris Sweeney",
+  "devDependencies": {
+	    "del": "2.2.2",
+	    "gulp-replace": "0.5.4",
+	    "gulp-rev-all": "0.8.24",
+	    "gulp-rev-delete-original": "0.2.2"
+  },
   "dependencies": {
     "angular": "^1.5.0-rc.2",
     "angular-ui-router": "^0.2.17",
