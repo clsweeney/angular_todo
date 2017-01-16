@@ -11,7 +11,7 @@ export default class VersionInfoService {
         if (this._gitHash.substr(0, 6) === 'TODOS:') {
             this._shortGitHash = 'Unknown';
         } else {
-            this._shortGitHash = this._gitHash.substr(0, this.SHORT_HASH_LENGTH);
+            this._shortGitHash = this._gitHash.substr(0, this._SHORT_HASH_LENGTH);
         }
          
         if (this._gitBranch.substr(0, 6) === 'TODOS:') {
