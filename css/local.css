@@ -38,4 +38,7 @@
 	height: 13rem;
 	overflow:auto;
 }
+
+.error-msg {
+	color: red;
 }

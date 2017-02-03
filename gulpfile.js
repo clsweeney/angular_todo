@@ -57,7 +57,7 @@ gulp.task('html', function() {
 });
 
 gulp.task('css', function() {
-	  return gulp.src("css/local.css")
+	  return gulp.src("css/*.css")
 	      .on('error', interceptErrors)
 	      .pipe(gulp.dest('./build/'));
 	});
@@ -82,7 +82,7 @@ gulp.task('build', ['html', 'css', 'browserify'], function() {
                .pipe(uglify())
                .pipe(gulp.dest('./dist/'));
   
-  var css = gulp.src("build/local.css")
+  var css = gulp.src("build/*.css")
   				.pipe(gulp.dest('./dist/'));
  
 
@@ -122,6 +122,11 @@ gulp.task('version-build', ['build'], function() {
             .pipe(gulp.dest('dist'))
 });
 
+gulp.task('clean', function(cb){
+    return del(['build/**/*']);
+    cb();
+});
+
 //clean the dist folder
 gulp.task('clean-dist', function(cb){
     return del(['dist/**/*']);
@@ -129,5 +134,14 @@ gulp.task('clean-dist', function(cb){
 });
 
 gulp.task('dist', ['version-build'], function() {
-	});
+});
+
+gulp.task('unit-test', function() {
+	execSync("npm test", {stdio:[0,1,2]});
+});
+
+gulp.task('debug-unit-test', function() {
+	execSync("npm run watch:testd", {stdio:[0,1,2]});
+});
+
 

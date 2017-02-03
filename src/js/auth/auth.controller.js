@@ -12,14 +12,16 @@ class AuthCtrl {
 
 	submitForm() {
 		this.isSubmitting = true;
+		self = this;
 
-		this._User.attemptAuth(this.authType, this.formData).then(
+		this._User.attemptAuth(self.authType, self.formData).then(
 				(res) => {
-					this._$state.go('app.home');
+					self._User.current = {username: self.formData.username};
+					self._$state.go('app.home');
 				},
 				(err) => {
-					this.isSubmitting = false;
-					this.errors = err.data.errors;
+					self.isSubmitting = false;
+					self.errors = 'Username or password invalid';
 				}
 		)
 	}
