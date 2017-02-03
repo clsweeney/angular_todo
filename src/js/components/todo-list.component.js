@@ -5,27 +5,23 @@ class TodoListCtrl {
 		this._Todos = Todos;
 		this._$state = $state;
 
-		if (!User.current) {
-			this._$state.go('app.login');
+
+		this._User = User;
+		if (!this.list) {
+			this.updateTodoList();
 		}
-		else {
-			this._User = User;
-			if (!this.list) {
-				this.updateTodoList();
-			}
 
-			$scope.$on('updateTodoView', (ev, notUsed) => {
-				this.updateTodoList();
-			});
+		$scope.$on('updateTodoView', (ev, notUsed) => {
+			this.updateTodoList();
+		});
 
-			$scope.$on('addTodo', (ev, todoValue) => {
-				this.addTodo(todoValue);
-			});
+		$scope.$on('addTodo', (ev, todoValue) => {
+			this.addTodo(todoValue);
+		});
 
-			$scope.$on('todDeleted', (ev, todoValue) => {
-				this.updateTodoList(null);
-			});
-		}
+		$scope.$on('todDeleted', (ev, todoValue) => {
+			this.updateTodoList(null);
+		});
 
 	}
 	addTodo(todoValue) {
@@ -33,7 +29,7 @@ class TodoListCtrl {
 		.save(todoValue)
 		.then(
 				(result) => {
-					this.list = result;
+					this.list = result.data ? result.data : result;
 				});
 	}
 
@@ -42,7 +38,7 @@ class TodoListCtrl {
 		.query()
 		.then(
 				(result) => {
-					this.list = result;
+					this.list = result.data ? result.data : result;
 				});
 	}
 

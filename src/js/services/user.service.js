@@ -1,75 +1,56 @@
 export default class User {
-	constructor(JWT, AppConstants, $http, $state, $q) {
+	constructor(AppConstants, $http, $state, $q) {
 		'ngInject';
-
-		this._JWT = JWT;
+		
 		this._AppConstants = AppConstants;
 		this._$http = $http;
 		this._$state = $state;
 		this._$q = $q;
 
-		this.current = null;
+		this.current = undefined;
 	}
 
-
 	attemptAuth(type, credentials) {
-		if (credentials.password === 'todos') {
-			this.current = {username: credentials.username};
+		if (this._AppConstants.useSessionStorage) {
+			if (credentials.password === 'todos') {
+				this.current = {username: credentials.username};
+			}
+			return this._$q(function(resolve, reject) {
+				setTimeout(function() {
+					if (credentials.password === 'todos') {
+						this.current = {username: credentials.username};
+						resolve('Login SUCCESS');
+					} else {
+						reject('Login FAILED');
+					}
+				}, 1000);
+			});
+		} else {
+			var headers = credentials ? {authorization : "Basic "
+				+ btoa(credentials.username + ":" + credentials.password)
+			} : {};
+			return this._$http.get('user', {headers : headers});
 		}
-		return this._$q(function(resolve, reject) {
-			setTimeout(function() {
-				if (credentials.password === 'todos') {
-					this.current = {username: credentials.username};
-					resolve(
-					'Logged in');
-				} else {
-					reject('Username or password invalid');
-				}
-			}, 1000);
-		});
 	}
 
 	logout() {
-		this.current = null;
-		this._JWT.destroy();
-		this._$state.go(this._$state.$current, null, { reload: true });
+		var $self = this;
+		if (this._AppConstants.useSessionStorage) {
+			this._$http.post('logout', {}).finally(function() {
+				$self.current = undefined;
+				$self._$state.go('app.login', null, { reload: true });
+			});
+		} else {
+			$self.current = undefined;
+			$self._$state.go('app.login', null, { reload: true });
+		}
 	}
 
 	verifyAuth() {
 		let deferred = this._$q.defer();
-
-		// check for JWT token
-		if (!this._JWT.get()) {
-			deferred.resolve(false);
-			return deferred.promise;
-		}
-
-		if (this.current) {
-			deferred.resolve(true);
-
-		} else {
-			this._$http({
-				url: this._AppConstants.api + '/user',
-				method: 'GET',
-				headers: {
-					Authorization: 'Token ' + this._JWT.get()
-				}
-			}).then(
-					(res) => {
-						this.current = res.data.user;
-						deferred.resolve(true);
-					},
-
-					(err) => {
-						this._JWT.destroy();
-						deferred.resolve(false);
-					}
-			)
-		}
-
+		deferred.resolve(false);
 		return deferred.promise;
 	}
-
 
 	ensureAuthIs(bool) {
 		let deferred = this._$q.defer();
@@ -85,6 +66,10 @@ export default class User {
 		});
 
 		return deferred.promise;
+	}
+	
+	currentUsername() {
+		return (this._User && this._User.current && this._User.current.username) || 'Unknown';
 	}
 
 }

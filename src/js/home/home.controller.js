@@ -18,7 +18,7 @@ class HomeCtrl {
 	}
 	
 	username() {
-		return this._User.current.username;
+		return (this._User && this._User.current && this._User.current.username) || '';
 	}
 }
 
