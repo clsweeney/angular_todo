@@ -1,0 +1,41 @@
+<project name="networkfleet_build" default="build.all">
+
+	<target name="clean.all">
+		<exec executable="gulp" dir="angular1.5">
+			<arg value="clean"/>
+		</exec>
+		<exec executable="mvn" dir="server">
+			<arg value="clean"/>
+		</exec>
+	</target>
+	
+	<target name="build.ui">
+		<exec executable="gulp" dir="angular1.5">
+			<arg value="build"/>
+		</exec>
+	</target>
+	
+	<target name="copy.ui">
+		<copy todir="./server/src/main/resources/static" overwrite="true">
+			<fileset dir="./angular1.5/build/" />
+		</copy>		
+	</target>
+	
+	<target name="build.server">
+		<exec executable="mvn" dir="server">
+			<arg value="package"/>
+		</exec>
+	</target>
+	
+	<target name="copy.server">
+		<copy todir="./" file="./server/target/todo-spring-boot-server-0.0.1.jar" />
+	</target>
+	
+	<target name="build.all">
+		<ant target="clean.all"/>
+		<ant target="build.ui"/>
+		<ant target="copy.ui"/>
+		<ant target="build.server"/>
+		<ant target="copy.server"/>
+	</target>
+</project>

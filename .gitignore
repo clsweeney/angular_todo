@@ -6,3 +6,6 @@ dist/
 server/.classpath
 server/.mvn/
 server/.settings/
+server/target/
+todo-spring-boot-server-0.0.1.jar
+tododb.mv.db
