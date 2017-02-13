@@ -35,15 +35,10 @@ export default class User {
 
 	logout() {
 		var $self = this;
-		if (this._AppConstants.useSessionStorage) {
-			this._$http.post('logout', {}).finally(function() {
-				$self.current = undefined;
-				$self._$state.go('app.login', null, { reload: true });
-			});
-		} else {
+		this._$http.post('logout', {}).finally(function() {
 			$self.current = undefined;
 			$self._$state.go('app.login', null, { reload: true });
-		}
+		});
 	}
 
 	verifyAuth() {

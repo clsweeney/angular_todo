@@ -1,17 +1,29 @@
 describe('User service', function() {
 	var User;
 	var credentials = { username: 'bob', password: 'varies'};
+	
+	var mockAppConstants = {
+			useSessionStorage: true
+	};
 
 	// Before each test load our api.users module
 	beforeEach(angular.mock.module('app.services'));
 	
 	beforeEach(angular.mock.module('ui.router'));
+	
+	beforeEach(function () {
+		  angular.mock.module(function ($provide) {
+		    $provide.value('AppConstants', mockAppConstants);
+		  });
+	});
 
 	// Before each test set our injected Users factory (_Users_) to our
 	// local Users variable
 	beforeEach(inject(function(_User_) {
 		User = _User_;
 	}));
+	
+
 
 	// A simple test to verify the Users factory exists
 	it('should exist', function() {
@@ -25,7 +37,7 @@ describe('User service', function() {
 	it('should fail if invalid password is passed', function() {
 		credentials.password = 'invalid';
 		User.attemptAuth('dontCare', credentials);
-		expect(User.current).toBe(null);
+		expect(User.current).toBe(undefined);
 	});
 	
 	it('should succeed if valid password is passed', function() {
@@ -40,7 +52,6 @@ describe('User service', function() {
 		credentials.password = 'todos';
 		User.attemptAuth('dontCare', credentials);
 		User.logout();
-		expect(User.current).toBeDefined();
-		expect(User.current.username).toBe('bob');
+		expect(User.current).toBe(undefined);
 	});
 });

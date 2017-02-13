@@ -1,4 +1,4 @@
-<project name="networkfleet_build" default="build.all">
+<project name="angular todos build" default="build.all">
 
 	<target name="clean.all">
 		<exec executable="gulp" dir="angular1.5">
@@ -7,6 +7,7 @@
 		<exec executable="mvn" dir="server">
 			<arg value="clean"/>
 		</exec>
+		<delete file="todo-spring-boot-server-0.0.1.jar" />
 	</target>
 	
 	<target name="build.ui">

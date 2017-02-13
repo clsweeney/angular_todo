@@ -9,3 +9,6 @@ server/.settings/
 server/target/
 todo-spring-boot-server-0.0.1.jar
 tododb.mv.db
+angular1.5/coverage/
+server/src/main/resources/static/
+angular1.5/src/js/config/app.templates.js
