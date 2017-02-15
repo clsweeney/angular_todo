@@ -11,19 +11,18 @@ export default class User {
 	}
 
 	attemptAuth(type, credentials) {
+		var $self = this;
 		if (this._AppConstants.useSessionStorage) {
 			if (credentials.password === 'todos') {
-				this.current = {username: credentials.username};
+				$self.current = {username: credentials.username};
 			}
 			return this._$q(function(resolve, reject) {
-				setTimeout(function() {
 					if (credentials.password === 'todos') {
-						this.current = {username: credentials.username};
+						$self.current = {username: credentials.username};
 						resolve('Login SUCCESS');
 					} else {
 						reject('Login FAILED');
 					}
-				}, 1000);
 			});
 		} else {
 			var headers = credentials ? {authorization : "Basic "

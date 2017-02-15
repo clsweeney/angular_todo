@@ -1,6 +1,8 @@
 describe('User service', function() {
 	var User;
 	var credentials = { username: 'bob', password: 'varies'};
+	var $rootScope;
+	var $httpBackend;
 	
 	var mockAppConstants = {
 			useSessionStorage: true
@@ -23,8 +25,19 @@ describe('User service', function() {
 		User = _User_;
 	}));
 	
-
-
+	beforeEach(inject(function(_$rootScope_) {
+		  $rootScope = _$rootScope_;
+	}));
+	
+	 beforeEach(inject(function(_$state_) {
+		 $state = _$state_;
+	     spyOn($state, 'go');
+	 }));
+	 
+	 beforeEach(inject(function(_$httpBackend_) {
+		  $httpBackend = _$httpBackend_;
+	}));
+	
 	// A simple test to verify the Users factory exists
 	it('should exist', function() {
 		expect(User).toBeDefined();
@@ -48,10 +61,18 @@ describe('User service', function() {
 	});
 	
 	it('should allow logout', function() {
-		pending();
+		//pending();
+		$httpBackend
+	    .when('POST', 'logout')
+	    .respond(200, {
+	        status: "success"
+	    });
+		
 		credentials.password = 'todos';
 		User.attemptAuth('dontCare', credentials);
 		User.logout();
+		$httpBackend.flush();
 		expect(User.current).toBe(undefined);
+		expect($state.go).toHaveBeenCalledWith('app.login', null, Object({ reload: true }));
 	});
 });
