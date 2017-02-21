@@ -6,13 +6,13 @@ class TodoCtrl {
 		this._$state = $state;
 
 		this.editFlag = false;
-		this.notUsed = false;
+		this.notUsedButNecessary = false;
 	}
 
 	deleteTodo() {
 		this._Todos.deleteTodo(this.todo)
 		.then( (result) => {
-			this._$scope.$emit('todDeleted');
+			this._$scope.$emit('todoDeleted');
 		});
 		this.notUsed = false;
 	}

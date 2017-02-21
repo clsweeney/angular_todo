@@ -1,5 +1,4 @@
 describe('component: TodoListCtrl', function() {
-	var $controller;
 	var $componentController;
 	var User;
 	var Todos;
@@ -28,10 +27,6 @@ describe('component: TodoListCtrl', function() {
 	beforeEach(inject(function(_Todos_) {
 		Todos = _Todos_;
 	}));
-
-//	beforeEach(inject(function(_User_) {
-//		User = _User_;
-//	}));
 
 	beforeEach(inject(function(_$rootScope_) {
 		$rootScope = _$rootScope_;

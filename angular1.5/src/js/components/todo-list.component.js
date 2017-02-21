@@ -19,7 +19,7 @@ class TodoListCtrl {
 			this.addTodo(todoValue);
 		});
 
-		$scope.$on('todDeleted', (ev, todoValue) => {
+		$scope.$on('todoDeleted', (ev, todoValue) => {
 			this.updateTodoList(null);
 		});
 
